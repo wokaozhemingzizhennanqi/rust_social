@@ -15,5 +15,13 @@ pub mod rust_social {
         profile::create_profile(ctx,display_name)
     }
 
+    pub fn create_tweet(ctx:Context<CreateTweet>,body:String) -> Result<()>  {
+        tweet::create_tweet(ctx,body)
+    }
+
+    pub fn create_like(ctx:Context<CreateLike>) -> Result<()>  {
+        tweet::create_like(ctx)
+    }
+
 
 }

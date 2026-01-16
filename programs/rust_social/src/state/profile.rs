@@ -4,6 +4,8 @@ use anchor_lang::prelude::*;
 pub struct IbuildProfile {
     #[max_len(20)]
     pub display_name: String,
+
+    pub tweet_count: u32,
 }
 
 impl IbuildProfile {
