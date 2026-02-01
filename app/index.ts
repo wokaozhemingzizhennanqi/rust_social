@@ -2,10 +2,15 @@ import {useDefaultWallet, useVisitorWallet} from "./api/wallet";
 import {createProfile, getProfile} from "./api/profile";
 import "./api/tweet";
 import {createLike, createTweet, getTweet} from "./api/tweet";
+import {createTokenMintAccount} from "./api/token";
 
 (async ()=> {
     const defaultWallet = useDefaultWallet();
     const visitWallet = useVisitorWallet();
+
+    const [tokenPda,r] = await createTokenMintAccount(defaultWallet)
+    console.log(tokenPda.toString(),r)
+
     try {
 
         const r1 = await createProfile(defaultWallet, "Alice");
@@ -26,9 +31,10 @@ import {createLike, createTweet, getTweet} from "./api/tweet";
     }
 
     const [pda, r3] = await createTweet(defaultWallet, "hello world");
-    console.log(r3);
+    console.log("r3"+r3);
     const r4 = await getTweet(defaultWallet, pda)
 
+    console.log("r4")
     console.log(r4);
 
     const r5 = await createLike(visitWallet, pda)
@@ -36,7 +42,12 @@ import {createLike, createTweet, getTweet} from "./api/tweet";
 
     const r6 = await getTweet(defaultWallet, pda)
 
-    console.log(r6);
-    const r7 = await createLike(visitWallet, pda)
+    // console.log(r6);
+    // const r7 = await createLike(visitWallet, pda)
 
 })()
+
+
+// if (require.main === module) {
+//     main().then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); });
+// }
