@@ -4,6 +4,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token::accessor::amount;
 use anchor_spl::token::{mint_to, Mint, MintTo, Token, TokenAccount};
+use crate::{state::token::IbuildToken};
 
 pub fn create_tweet(ctx:Context<CreateTweet>, body:String) -> Result<()> {
 
@@ -20,8 +21,8 @@ pub fn create_like(ctx:Context<CreateLike>) -> Result<()> {
 
     let like_rel = IbuildLike::new(ctx.accounts.profile.key(), tweet.key());
 
-    let (_, bump) = Pubkey::find_program_address(&[b"mint_v21"], ctx.program_id);
-    let seeds = &[b"mint_v21".as_ref(), &[bump]];
+    let (_, bump) = Pubkey::find_program_address(&[IbuildToken::SEED_PREFIX.as_bytes()], ctx.program_id);
+    let seeds = &[IbuildToken::SEED_PREFIX.as_bytes(), &[bump]];
     let signer = &[&seeds[..]];
 
     mint_to(CpiContext::new_with_signer(
@@ -73,7 +74,7 @@ pub struct CreateTweet<'info>{
 pub struct CreateLike<'info> {
     #[account(
         mut,
-        seeds=[b"mint_v21"],
+        seeds=[IbuildToken::SEED_PREFIX.as_bytes()],
         bump,
     )]
     pub mint_account: Account<'info,Mint>,

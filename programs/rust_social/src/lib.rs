@@ -28,4 +28,12 @@ pub mod rust_social {
         token::create_token_mint_account(ctx)
     }
 
+    pub fn create_nft_token_account(ctx:Context<CreateNftTokenAccount>,id :String ) -> Result<()>  {
+        nft_mint::create_nft_token_account(ctx, id)
+    }
+
+    pub fn nft_stake(ctx:Context<NftStake>) -> Result<()>  {
+        nft_stake::stake(ctx)
+    }
+
 }

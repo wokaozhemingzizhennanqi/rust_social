@@ -2,9 +2,10 @@ use anchor_lang::prelude::*;
 use anchor_spl::metadata::{create_metadata_accounts_v3, CreateMetadataAccountsV3, Metadata};
 use anchor_spl::metadata::mpl_token_metadata::types::DataV2;
 use anchor_spl::token::{Mint, Token};
+use crate::{state::token::IbuildToken};
 
 pub fn create_token_mint_account(_ctx:Context< CreateTokenMintAccount>) -> anchor_lang::Result<()> {
-    let signer_seeds: &[&[&[u8]]] = &[&[b"mint_v21", &[_ctx.bumps.mint_account]]];
+    let signer_seeds: &[&[&[u8]]] = &[&[IbuildToken::SEED_PREFIX.as_bytes(), &[_ctx.bumps.mint_account]]];
 
     // Define DataV2 locally to ensure serialization compatibility
     #[derive(AnchorSerialize, AnchorDeserialize)]
@@ -42,34 +43,34 @@ pub fn create_token_mint_account(_ctx:Context< CreateTokenMintAccount>) -> ancho
     let mut data = vec![33]; // Discriminator for CreateMetadataAccountsV3
     data.append(&mut args.try_to_vec()?);
 
-    let ix = instruction::Instruction {
+    instruction::Instruction {
         program_id: _ctx.accounts.token_metadata_program.key(),
         accounts: vec![
-            anchor_lang::solana_program::instruction::AccountMeta::new(
+            AccountMeta::new(
                 _ctx.accounts.metadata_account.key(),
                 false,
             ),
-            anchor_lang::solana_program::instruction::AccountMeta::new_readonly(
+            AccountMeta::new_readonly(
                 _ctx.accounts.mint_account.key(),
                 false,
             ),
-            anchor_lang::solana_program::instruction::AccountMeta::new_readonly(
+            AccountMeta::new_readonly(
                 _ctx.accounts.mint_account.key(), // mint_authority
                 true, // signer
             ),
-            anchor_lang::solana_program::instruction::AccountMeta::new(
+            AccountMeta::new(
                 _ctx.accounts.authority.key(), // payer
                 true, // signer
             ),
-            anchor_lang::solana_program::instruction::AccountMeta::new_readonly(
+            AccountMeta::new_readonly(
                 _ctx.accounts.mint_account.key(), // update_authority
                 true, // signer
             ),
-            anchor_lang::solana_program::instruction::AccountMeta::new_readonly(
+            AccountMeta::new_readonly(
                 _ctx.accounts.system_program.key(),
                 false,
             ),
-            anchor_lang::solana_program::instruction::AccountMeta::new_readonly(
+            AccountMeta::new_readonly(
                 _ctx.accounts.rent.key(),
                 false,
             ),
@@ -113,9 +114,11 @@ pub struct CreateTokenMintAccount<'info> {
     #[account(
         init_if_needed,
         payer=authority,
-        seeds=[b"mint_v21"],
+        seeds=[
+            IbuildToken::SEED_PREFIX.as_bytes()
+        ],
         bump,
-        mint::decimals = 2,
+        mint::decimals = IbuildToken::TOKEN_DECIMALS,
         mint::authority=mint_account.key(),
     )]
     pub mint_account: Account<'info,Mint>,

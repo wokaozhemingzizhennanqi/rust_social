@@ -3,6 +3,8 @@ import {createProfile, getProfile} from "./api/profile";
 import "./api/tweet";
 import {createLike, createTweet, getTweet} from "./api/tweet";
 import {createTokenMintAccount} from "./api/token";
+import {createNFTTokenMintAccount} from "./api/nft_token";
+import {nftStake} from "./api/nftStake";
 
 (async ()=> {
     const defaultWallet = useDefaultWallet();
@@ -29,22 +31,28 @@ import {createTokenMintAccount} from "./api/token";
     } catch (e) {
         // console.log(e);
     }
-
-    const [pda, r3] = await createTweet(defaultWallet, "hello world");
-    console.log("r3"+r3);
-    const r4 = await getTweet(defaultWallet, pda)
-
-    console.log("r4")
-    console.log(r4);
-
-    const r5 = await createLike(visitWallet, pda)
-    console.log(r5);
-
-    const r6 = await getTweet(defaultWallet, pda)
+    //
+    // const [pda, r3] = await createTweet(defaultWallet, "hello world");
+    // console.log("r3"+r3);
+    // const r4 = await getTweet(defaultWallet, pda)
+    //
+    // console.log("r4")
+    // console.log(r4);
+    //
+    // const r5 = await createLike(visitWallet, pda)
+    // console.log(r5);
+    //
+    // const r6 = await getTweet(defaultWallet, pda)
 
     // console.log(r6);
     // const r7 = await createLike(visitWallet, pda)
 
+    //
+    // const r8 = await createNFTTokenMintAccount(defaultWallet,"4")
+    // console.log(r8)
+
+    const r9 = await nftStake(defaultWallet,"4")
+    console.log(r9)
 })()
 
 

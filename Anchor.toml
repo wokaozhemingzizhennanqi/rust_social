@@ -16,15 +16,21 @@ url = "https://api.apr.dev"
 cluster = "localnet"
 wallet = "~/.config/solana/id.json"
 
-#[test.validator]
-#bind_address="0.0.0.0"
-#url = "https://mainnet.helius-rpc.com/?api-key=a23e14a3-7b17-4a47-939d-0474aeaa2432"
-#ledger=".anchor/test-ledger"
-#rpc_port=8899
+[test.validator]
+bind_address="0.0.0.0"
+url = "https://mainnet.helius-rpc.com/?api-key=a23e14a3-7b17-4a47-939d-0474aeaa2432"
+ledger=".anchor/test-ledger"
+rpc_port=8899
+clone = [
+    { address = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s" }, # Metaplex Metadata Program
+    { address = "PwDiXFxQsGra4sFFTT8r1QWRMd4vfumiWC1jfWNfdYT" }, # (可选) 相关的其他账户
+]
 
-[[test.genesis]]
-address = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
-program = "tests/fixtures/mpl_token_metadata.so"
+#
+# [[test.genesis]]
+# address = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+# program = "tests/fixtures/mpl_token_metadata.so"
+
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 \"tests/**/*.ts\""
